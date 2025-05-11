@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* if screen is smaller, make the width 100vw */
+@media (max-width: 1280px) {
+  #root {
+    width: 100vw;
+  }
+}
+
+code {
+  @apply bg-gray-100;
+  @apply px-1;
+  @apply rounded;
+}
+
+a {
+  @apply underline;
+  cursor: pointer;
+}

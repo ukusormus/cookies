@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - mkdocs/**
+      - tools/site-origin-cookie-scopes-visualizer/**
     branches: [ "main" ]
 
   workflow_dispatch:
@@ -23,6 +24,7 @@ jobs:
       - name: Set up Pages
         uses: actions/configure-pages@v5
 
+      # mkdocs
       - name: Install uv
         uses: astral-sh/setup-uv@v5
         with:
@@ -36,6 +38,19 @@ jobs:
       - name: Build MkDocs
         working-directory: mkdocs/
         run: uv run mkdocs build
+
+      # tool
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "^22.14.0"
+
+      - name: Build tool
+        working-directory: tools/site-origin-cookie-scopes-visualizer/
+        run: npm ci && npm run build
+
+      - name: Copy tool to MkDocs build output
+        run: cp -r tools/site-origin-cookie-scopes-visualizer/dist/* mkdocs/site/site-origin-cookie-scopes-visualizer
 
       - name: Upload static files as artifact
         id: deployment

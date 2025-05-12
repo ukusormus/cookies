@@ -501,7 +501,7 @@ function OutputCookieScopes({
         ... the following actions can be taken from shown scopes:
       </p>
 
-      <div className="grid">
+      <div className="grid xl:justify-center">
         <SectionHeader>
           Directly interact with an already existing cookie{" "}
           <code>{cookieName}</code> set on target

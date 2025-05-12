@@ -24,7 +24,7 @@ function Row({
   return (
     <tr className="text-nowrap border">
       {isEqual ? (
-        <td colSpan={2} className="text-center font-mono border">
+        <td colSpan={2} className="text-center font-mono p-2 border">
           {cell1}
         </td>
       ) : (

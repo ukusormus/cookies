@@ -520,7 +520,10 @@ function OutputCookieScopes({
                 </li>
                 <li>
                   <code>Path</code>{" "}
-                  <a href="https://html.spec.whatwg.org/#:~:text=the%20path%20restrictions%20on%20cookies">
+                  <a
+                    href="https://html.spec.whatwg.org/#:~:text=the%20path%20restrictions%20on%20cookies"
+                    target="_blank"
+                  >
                     is not considered a security feature
                   </a>
                   : for server-side control, just make an HTTP request with the

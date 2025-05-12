@@ -233,6 +233,7 @@ export default function OutputSiteOriginScopesTable({
             <a
               className="underline"
               href="https://developer.chrome.com/blog/document-domain-setter-deprecation#browser-compatibility"
+              target="_blank"
             >
               being phased out
             </a>

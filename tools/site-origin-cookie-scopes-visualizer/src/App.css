@@ -7,7 +7,7 @@
 }
 
 /* if screen is smaller, make the width 100vw */
-@media (max-width: 1280px) {
+@media (max-width: 1279px) {
   #root {
     width: 100vw;
   }

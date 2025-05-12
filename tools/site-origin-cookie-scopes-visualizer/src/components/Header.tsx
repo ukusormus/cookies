@@ -26,18 +26,24 @@ export default function Header() {
                 browser-side;
               </li>
               <li>
-                <a href="https://labs.detectify.com/writeups/hostile-subdomain-takeover-using-heroku-github-desk-more/">
+                <a
+                  href="https://labs.detectify.com/writeups/hostile-subdomain-takeover-using-heroku-github-desk-more/"
+                  target="_blank"
+                >
                   subdomain
                 </a>{" "}
-                <a href="https://canitakeyoursubdomain.name/">takeover</a>,
-                which may even include server-side control of reading HTTP
+                <a href="https://canitakeyoursubdomain.name/" target="_blank">
+                  takeover
+                </a>
+                , which may even include server-side control of reading HTTP
                 request headers (like <code>Cookie</code>) and issuing response
                 headers (like <code>Set-Cookie</code>);
               </li>
               <li>
-                an active network which could modify plaintext HTTP traffic,
-                e.g., set a cookie through <code>http://bank.example</code>{" "}
-                before it is redirected to <code>https://bank.example</code>.
+                an active network attacker who could modify plaintext HTTP
+                traffic, e.g., set a cookie through{" "}
+                <code>http://bank.example</code> before it is redirected to{" "}
+                <code>https://bank.example</code>.
               </li>
             </ul>
           </div>

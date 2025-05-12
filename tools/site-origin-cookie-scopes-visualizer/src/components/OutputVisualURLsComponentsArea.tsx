@@ -256,6 +256,7 @@ export default function OutputVisualURLsComponentsArea({
           <a
             href="https://url.spec.whatwg.org/#host-public-suffix"
             className="underline"
+            target="_blank"
           >
             public suffix
           </a>
@@ -265,6 +266,7 @@ export default function OutputVisualURLsComponentsArea({
           <a
             href="https://url.spec.whatwg.org/#host-registrable-domain"
             className="underline"
+            target="_blank"
           >
             registrable domain
           </a>
@@ -274,6 +276,7 @@ export default function OutputVisualURLsComponentsArea({
           <a
             href="https://github.com/publicsuffix/list/blob/main/public_suffix_list.dat"
             className="underline"
+            target="_blank"
           >
             Public Suffix List
           </a>

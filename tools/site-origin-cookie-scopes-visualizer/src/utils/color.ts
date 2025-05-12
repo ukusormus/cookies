@@ -25,7 +25,7 @@ export default function toColoredComponents(
   const httpColor = "bg-orange-100";
   const httpsColor = "bg-cyan-100";
   const host1Color = "bg-green-100";
-  const host2Color = "bg-neutral-100";
+  const host2Color = "bg-neutral-200";
   const registrableDomain1Color = "bg-violet-100";
   const registrableDomain2Color = "bg-lime-100";
   const port1Color = "bg-rose-100";

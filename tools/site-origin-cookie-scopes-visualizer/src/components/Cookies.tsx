@@ -737,9 +737,50 @@ function OutputCookieScopes({
           (non-preflighted) HTTP request to target URL (matching target cookie's{" "}
           <LinkToRow targetId="read">read&nbsp;scope</LinkToRow>) from attacker
           in {"<scope>"}
-          <p className="text-sm text-gray-400">
-            Basis for "CSRF" (or OSRF, On-Site Request Forgery) and XSSI attacks
-          </p>
+          <div className="my-1">
+            <p className="text-sm text-gray-400">
+              Basis for "CSRF" (or OSRF, On-Site Request Forgery) and XSSI
+              attacks.
+            </p>
+            <details className="text-sm text-gray-400 mt-1">
+              <summary>About simple requests & JSON</summary>
+              <p className="mt-1"></p>
+              Although <code>application/json</code>{" "}
+              <a
+                href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header"
+                target="_blank"
+              >
+                is not
+              </a>{" "}
+              a valid MIME type for a "simple" request, there are tricks to keep
+              the otherwise "simple" request "simple", that may fool a server
+              that only accepts JSON-formed body but is not checking for an
+              exact match in the <code>Content-Type</code> request header. In
+              JS:{" "}
+              <a
+                href="https://nastystereo.com/security/cross-site-post-without-content-type.html"
+                target="_blank"
+              >
+                using Blob
+              </a>{" "}
+              for no <code>Content-Type</code> request header at all, or passing{" "}
+              <a
+                href="https://github.com/BlackFan/content-type-research/blob/master/Browsers.md#request-content-type-tricks"
+                target="_blank"
+              >
+                extra characters
+              </a>{" "}
+              after a simple content type like <code>text/plain</code>. In pure
+              HTML: a valid JSON-body can be formed with the <code>form</code>{" "}
+              element,{" "}
+              <a
+                href="https://web.archive.org/web/20120210011109/http://blog.opensecurityresearch.com/2012/02/json-csrf-with-parameter-padding.html"
+                target="_blank"
+              >
+                too
+              </a>.
+            </details>
+          </div>
         </SectionHeader>
 
         <Table>
@@ -752,8 +793,9 @@ function OutputCookieScopes({
               </TableCell>
               <TableCell rowSpan={2}>
                 <li>
-                  Can always be attached by the attacker (the <code>SameSite</code> attribute has no
-                  effect on same-site requests!)
+                  Can always be attached by the attacker (the{" "}
+                  <code>SameSite</code> attribute has no effect on same-site
+                  requests!)
                 </li>
                 <li>
                   Browsers like Firefox are expected to follow suit including

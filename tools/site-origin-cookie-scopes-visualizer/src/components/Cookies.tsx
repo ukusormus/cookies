@@ -219,8 +219,18 @@ function TableHeader({
   );
 }
 
-function TableBody({ children }: { children: React.ReactNode }) {
-  return <tbody className="border">{children}</tbody>;
+function TableBody({
+  children,
+  id,
+}: {
+  children: React.ReactNode;
+  id?: string;
+}) {
+  return (
+    <tbody className="border" id={id}>
+      {children}
+    </tbody>
+  );
 }
 
 function TableRow({
@@ -733,8 +743,8 @@ function OutputCookieScopes({
         </SectionHeader>
 
         <Table>
-          <TableHeader th1={"<scope>"} th2={"Policy"} />
-          <TableBody>
+          <TableHeader th1={"<scope>"} th2="Policy applied" />
+          <TableBody id="same-site">
             <TableRow>
               <TableCell>{victimSchemefullySameSiteScope}</TableCell>
               <TableCell>
@@ -797,44 +807,112 @@ function OutputCookieScopes({
         </Table>
 
         <SectionHeader>
-          Target's cookie is attached to{" "}
+          Target's cookie is attached to non-
           <a
-            href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS#preflighted_requests"
+            href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS#simple_requests"
             target="_blank"
           >
-            preflighted
+            simple
           </a>{" "}
           HTTP request to target URL (matching target cookie's{" "}
           <LinkToRow targetId="read">read&nbsp;scope</LinkToRow>) from attacker
           in {"<scope>"}
-          <p className="text-sm text-gray-400">
-            Note that a CORS-preflight request{" "}
-            <a
-              href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials"
-              target="_blank"
-            >
-              never includes credentials
-            </a>
-          </p>
         </SectionHeader>
         <Table>
-          <TableHeader th1={"<scope>"} th2={"Policy"} />
+          <TableHeader th1={"<scope>"} th2="Policy applied" />
           <TableBody>
             <TableRow>
               <TableCell>{victimSameOriginScope}</TableCell>
-              <TableCell>Same-origin policy</TableCell>
+              <TableCell>Same-origin policy (SOP)</TableCell>
               <TableCell>
                 <li>
-                  SOP can be relaxed by Cross-Origin Resource Sharing (CORS)
-                  headers to include cookies for cross-origin requests;
-                  minimally, the{" "}
+                  <a
+                    href="https://fetch.spec.whatwg.org/#credentials"
+                    target="_blank"
+                  >
+                    Credentials
+                  </a>{" "}
+                  (including cookies) are included in same-origin requests{" "}
+                  <a
+                    href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode"
+                    target="_blank"
+                  >
+                    by default
+                  </a>
+                </li>
+                <li>
+                  Credentials can be explicitly omitted, e.g., in some HTML
+                  elements via the <code>crossorigin</code>{" "}
+                  <a
+                    href="https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/crossorigin"
+                    target="_blank"
+                  >
+                    {" "}
+                    attribute
+                  </a>{" "}
+                  or in JS, Fetch API's <code>credentials</code>{" "}
+                  <a
+                    href="https://developer.mozilla.org/en-US/docs/Web/API/RequestInit#credentials"
+                    target="_blank"
+                  >
+                    option
+                  </a>{" "}
+                  or XMLHttpRequest API's <code>withCredentials</code>{" "}
+                  <a
+                    href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials"
+                    target="_blank"
+                  >
+                    property
+                  </a>
+                </li>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>(doesn't match same-origin)</TableCell>
+              <TableCell>Cross-origin</TableCell>
+              <TableCellReadMore>
+                <li>
+                  Cross-origin non-simple requests are preflighted. Note that a
+                  CORS-preflight request itself{" "}
+                  <a
+                    href="https://fetch.spec.whatwg.org/#http-access-control-allow-credentials"
+                    target="_blank"
+                  >
+                    never includes credentials
+                  </a>{" "}
+                  (TLS client certificates are currently included in Chromium, a{" "}
+                  <a
+                    href="https://issues.chromium.org/issues/40089326"
+                    target="_blank"
+                  >
+                    bug
+                  </a>
+                  )
+                </li>
+                <li>
+                  The response to the preflight request can indicate credentials
+                  are allowed in the preflight<i>ed</i> request, minimally by
+                  returning the{" "}
                   <code>Access-Control-Allow-Credentials: true</code> and{" "}
                   <code>
                     Access-Control-Allow-Origin: {"<requestor origin>"}
                   </code>{" "}
-                  headers must be used
+                  response headers
                 </li>
-              </TableCell>
+                <li>
+                  <LinkToRow targetId="same-site">SameSite</LinkToRow>{" "}
+                  restrictions still apply to cookies
+                </li>
+                <li>
+                  <a
+                    href="https://portswigger.net/research/exploiting-cors-misconfigurations-for-bitcoins-and-bounties"
+                    target="_blank"
+                  >
+                    CORS misconfigurations
+                  </a>{" "}
+                  like reflecting arbitrary origin may become handy
+                </li>
+              </TableCellReadMore>
             </TableRow>
           </TableBody>
         </Table>

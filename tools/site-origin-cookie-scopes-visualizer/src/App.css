@@ -23,3 +23,7 @@ a {
   @apply underline;
   cursor: pointer;
 }
+
+details > summary {
+  cursor: pointer;
+}

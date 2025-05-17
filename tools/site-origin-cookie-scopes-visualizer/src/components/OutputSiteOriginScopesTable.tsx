@@ -218,6 +218,7 @@ export default function OutputSiteOriginScopesTable({
       </table>
 
       <details className="flex flex-col text-sm text-gray-400 mt-2">
+        <summary>Details</summary>
         <div>
           {noteMark1} if eTLD+1 is null, then exact host match is needed (no
           subdomains); eTLD+1 can be null in several situations, including when

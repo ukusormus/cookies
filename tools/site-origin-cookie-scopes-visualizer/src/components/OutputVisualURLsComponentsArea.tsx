@@ -251,6 +251,7 @@ export default function OutputVisualURLsComponentsArea({
 
       <div className="w-16 mb-1 h-[1px] bg-gray-200"></div>
       <details className="flex flex-col text-sm text-gray-400">
+        <summary>Details</summary>
         <p>
           eTLD (effective top-level domain) ={" "}
           <a

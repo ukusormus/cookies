@@ -752,7 +752,7 @@ function OutputCookieScopes({
               </TableCell>
               <TableCell rowSpan={2}>
                 <li>
-                  Always attached (the <code>SameSite</code> attribute has no
+                  Can always be attached by the attacker (the <code>SameSite</code> attribute has no
                   effect on same-site requests!)
                 </li>
                 <li>

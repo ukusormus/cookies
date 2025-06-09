@@ -489,9 +489,7 @@ function OutputCookieScopes({
   const evictingCookieScope = (
     <>
       {isSecure ? "https://" : "*://"}
-      {isCookieNamePrefixHost ? (
-        <span className={victimHostColor}>{victimComponents.host}</span>
-      ) : victimComponents.registrableDomain ? (
+      {victimComponents.registrableDomain ? (
         <>
           **.
           <span className={victimRegistrableDomainColor}>
@@ -679,7 +677,14 @@ function OutputCookieScopes({
               </TableCell>
               <TableCell>
                 <li>
-                  Even <code>HttpOnly</code> cookies can be evicted from JS
+                  Even <code>HttpOnly</code> cookies{" "}
+                  <a
+                    href="https://github.com/httpwg/http-extensions/issues/441"
+                    target="_blank"
+                  >
+                    can be
+                  </a>{" "}
+                  evicted from JS
                 </li>
                 <li>
                   The{" "}
@@ -778,7 +783,8 @@ function OutputCookieScopes({
                 target="_blank"
               >
                 too
-              </a>.
+              </a>
+              .
             </details>
           </div>
         </SectionHeader>

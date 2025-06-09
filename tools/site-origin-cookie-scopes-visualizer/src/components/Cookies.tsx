@@ -461,9 +461,10 @@ function OutputCookieScopes({
               <TableCell>Read the cookie's value</TableCell>
               <TableCellReadMore>
                 <li>
-                  If cookie has the <code>HttpOnly</code> attribute set,
+                  If a cookie has the <code>HttpOnly</code> attribute set,
                   attacker must have control of a server in scope to read the{" "}
-                  <code>Cookie</code> header from an HTTP request
+                  <code>Cookie</code> header from an HTTP request to read the
+                  cookie
                 </li>
                 <li>
                   <code>Path</code>{" "}
@@ -488,21 +489,25 @@ function OutputCookieScopes({
               <TableCell>Delete the cookie</TableCell>
               <TableCellReadMore rowSpan={2}>
                 <li>
-                  If cookie has <code>HttpOnly</code> attribute set, attacker
-                  must have control of a server in scope to return{" "}
-                  <code>Set-Cookie</code> header in HTTP response
+                  If a cookie has the <code>HttpOnly</code> attribute set,
+                  attacker must have control of a server in scope to return the{" "}
+                  <code>Set-Cookie</code> header in HTTP response to
+                  delete/overwrite the cookie
                 </li>
                 <li>
-                  It is still possible to indirectly delete an{" "}
-                  <code>HttpOnly</code> cookie from JS by triggering{" "}
-                  <LinkToRow targetId="evict">cookie eviction</LinkToRow>, and
-                  then overwrite it
+                  It is possible to indirectly delete (even{" "}
+                  <code>HttpOnly</code>) cookies from JS by triggering{" "}
+                  <LinkToRow targetId="evict">cookie eviction</LinkToRow>; then{" "}
+                  <LinkToRow targetId="create-new">
+                    creating a completely new cookie
+                  </LinkToRow>{" "}
+                  with the same name is effectively overwriting the original one
                 </li>
                 <li>
-                  It is still possible to shadow an <code>HttpOnly</code> cookie
+                  It is possible to shadow (even <code>HttpOnly</code>) cookie
                   from JS with a{" "}
-                  <LinkToRow targetId="shadow">competing cookie</LinkToRow>{" "}
-                  (which is often equivalent to overwriting from target server's
+                  <LinkToRow targetId="shadow">competing cookie</LinkToRow>,
+                  which is often equivalent to overwriting (from target server's
                   perspective)
                 </li>
               </TableCellReadMore>
@@ -517,7 +522,7 @@ function OutputCookieScopes({
         <Table>
           <TableHeader />
           <TableBody>
-            <TableRow>
+            <TableRow id="create-new">
               <TableCell>{completelyNewCookieScope}</TableCell>
               <TableCell>
                 Create completely new cookie with name <code>{cookieName}</code>{" "}

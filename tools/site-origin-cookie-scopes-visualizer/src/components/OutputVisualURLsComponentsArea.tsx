@@ -1,5 +1,5 @@
 import { URLComponents } from "../utils/psl.ts";
-import { ColoredComponents } from "../utils/color.ts";
+import { ColoredComponents } from "../utils/color.tsx";
 
 function Container({ children }: { children: React.ReactNode }) {
   return <div className="inline-flex flex-col justify-center">{children}</div>;

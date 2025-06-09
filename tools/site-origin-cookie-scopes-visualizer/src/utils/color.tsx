@@ -67,3 +67,80 @@ export default function toColoredComponents(
     ports: ports,
   };
 }
+
+/* Reusable JSX snippets */
+
+const missingComponentColor = "bg-gray-200"; // if this gets shown to user, something went wrong
+
+export function getColoredWildcardHost(
+  components: URLComponents,
+  coloredComponents: ColoredComponents,
+) {
+  const registrableDomainColor = components.registrableDomain
+    ? coloredComponents.registrableDomains[components.registrableDomain]
+    : missingComponentColor;
+  const hostColor = coloredComponents.hosts[components.host];
+
+  return (
+    <>
+      {components.registrableDomain ? (
+        <>
+          **.
+          <span className={registrableDomainColor}>
+            {components.registrableDomain}
+          </span>
+        </>
+      ) : (
+        <span className={hostColor}>{components.host}</span>
+      )}
+    </>
+  );
+}
+
+export function getColoredSchemelessSameSite(
+  components: URLComponents,
+  coloredComponents: ColoredComponents,
+) {
+  const wildcardHost = getColoredWildcardHost(components, coloredComponents);
+  return <>*://{wildcardHost}:*/**</>;
+}
+
+export function getColoredSchemefulSameSite(
+  components: URLComponents,
+  coloredComponents: ColoredComponents,
+) {
+  const wildcardHost = getColoredWildcardHost(components, coloredComponents);
+  const schemeColor = coloredComponents.schemes[components.scheme];
+
+  return (
+    <>
+      <span className={schemeColor}>{components.scheme}</span>://
+      {wildcardHost}
+      :*/**
+    </>
+  );
+}
+
+export function getColoredSameOrigin(
+  components: URLComponents,
+  coloredComponents: ColoredComponents,
+) {
+  const schemeColor = coloredComponents.schemes[components.scheme];
+  const hostColor = coloredComponents.hosts[components.host];
+  const portColor = components.port
+    ? coloredComponents.ports[components.port]
+    : missingComponentColor;
+
+  return (
+    <>
+      <span className={schemeColor}>{components.scheme}</span>://
+      <span className={hostColor}>{components.host}</span>
+      {components.port && (
+        <>
+          :<span className={portColor}>{components.port}</span>
+        </>
+      )}
+      /**
+    </>
+  );
+}

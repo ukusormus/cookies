@@ -1,5 +1,10 @@
 import { URLComponents } from "../utils/psl.ts";
-import { ColoredComponents } from "../utils/color.ts";
+import { ColoredComponents } from "../utils/color.tsx";
+import {
+  getColoredSameOrigin,
+  getColoredSchemefulSameSite,
+  getColoredSchemelessSameSite,
+} from "../utils/color.tsx";
 
 function Row({
   isEqual,
@@ -78,106 +83,29 @@ export default function OutputSiteOriginScopesTable({
     <sup className="before:content-['2'] before:text-gray-400"></sup>
   );
 
-  const missingComponentColor = "bg-gray-200"; // if this gets shown, something went wrong
-  const victimSchemeColor = coloredComponents.schemes[victimComponents.scheme];
-  const attackerSchemeColor =
-    coloredComponents.schemes[attackerComponents.scheme];
-  const victimHostColor = coloredComponents.hosts[victimComponents.host];
-  const attackerHostColor = coloredComponents.hosts[attackerComponents.host];
-  const victimRegistrableDomainColor = victimComponents.registrableDomain
-    ? coloredComponents.registrableDomains[victimComponents.registrableDomain]
-    : missingComponentColor;
-  const attackerRegistrableDomainColor = attackerComponents.registrableDomain
-    ? coloredComponents.registrableDomains[attackerComponents.registrableDomain]
-    : missingComponentColor;
-  const victimPortColor = victimComponents.port
-    ? coloredComponents.ports[victimComponents.port]
-    : missingComponentColor;
-  const attackerPortColor = attackerComponents.port
-    ? coloredComponents.ports[attackerComponents.port]
-    : missingComponentColor;
-
-  const victimSchemelesslySameSiteScope = (
-    <>
-      *://
-      {victimComponents.registrableDomain ? "**." : ""}
-      {victimComponents.registrableDomain ? (
-        <span className={victimRegistrableDomainColor}>
-          {victimComponents.registrableDomain}
-        </span>
-      ) : (
-        <span className={victimHostColor}>{victimComponents.host}</span>
-      )}
-      :*/**
-    </>
+  const victimSchemelesslySameSiteScope = getColoredSchemelessSameSite(
+    victimComponents,
+    coloredComponents,
   );
-  const attackerSchemelesslySameSiteScope = (
-    <>
-      *://
-      {attackerComponents.registrableDomain ? "**." : ""}
-      {attackerComponents.registrableDomain ? (
-        <span className={attackerRegistrableDomainColor}>
-          {attackerComponents.registrableDomain}
-        </span>
-      ) : (
-        <span className={attackerHostColor}>{attackerComponents.host}</span>
-      )}
-      :*/**
-    </>
+  const attackerSchemelesslySameSiteScope = getColoredSchemelessSameSite(
+    attackerComponents,
+    coloredComponents,
   );
-  const victimSchemefullySameSiteScope = (
-    <>
-      <span className={victimSchemeColor}>{victimComponents.scheme}</span>://
-      {victimComponents.registrableDomain && "**."}
-      {victimComponents.registrableDomain ? (
-        <span className={victimRegistrableDomainColor}>
-          {victimComponents.registrableDomain}
-        </span>
-      ) : (
-        <span className={victimHostColor}>{victimComponents.host}</span>
-      )}
-      :*/**
-    </>
+  const victimSchemefullySameSiteScope = getColoredSchemefulSameSite(
+    victimComponents,
+    coloredComponents,
   );
-  const attackerSchemefullySameSiteScope = (
-    <>
-      <span className={attackerSchemeColor}>{attackerComponents.scheme}</span>
-      ://
-      {attackerComponents.registrableDomain && "**."}
-      {attackerComponents.registrableDomain ? (
-        <span className={attackerRegistrableDomainColor}>
-          {attackerComponents.registrableDomain}
-        </span>
-      ) : (
-        <span className={attackerHostColor}>{attackerComponents.host}</span>
-      )}
-      :*/**
-    </>
+  const attackerSchemefullySameSiteScope = getColoredSchemelessSameSite(
+    attackerComponents,
+    coloredComponents,
   );
-  const victimSameOriginScope = (
-    <>
-      <span className={victimSchemeColor}>{victimComponents.scheme}</span>://
-      <span className={victimHostColor}>{victimComponents.host}</span>
-      {victimComponents.port && (
-        <>
-          :<span className={victimPortColor}>{victimComponents.port}</span>
-        </>
-      )}
-      /**
-    </>
+  const victimSameOriginScope = getColoredSameOrigin(
+    victimComponents,
+    coloredComponents,
   );
-  const attackerSameOriginScope = (
-    <>
-      <span className={attackerSchemeColor}>{attackerComponents.scheme}</span>
-      ://
-      <span className={attackerHostColor}>{attackerComponents.host}</span>
-      {attackerComponents.port && (
-        <>
-          :<span className={attackerPortColor}>{attackerComponents.port}</span>
-        </>
-      )}
-      /**
-    </>
+  const attackerSameOriginScope = getColoredSameOrigin(
+    attackerComponents,
+    coloredComponents,
   );
 
   return (

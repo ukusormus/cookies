@@ -2,7 +2,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 
 import { loadPSL, urlToComponents } from "./utils/psl.ts";
-import toColoredComponents from "./utils/color.ts";
+import toColoredComponents from "./utils/color.tsx";
 import validateURL from "./utils/url.ts";
 
 import Header from "./components/Header.tsx";

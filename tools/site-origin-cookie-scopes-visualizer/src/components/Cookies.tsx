@@ -1,6 +1,6 @@
 import { URLComponents } from "../utils/psl.ts";
 import { useEffect, useState } from "react";
-import { ColoredComponents } from "../utils/color.ts";
+import { ColoredComponents } from "../utils/color.tsx";
 import * as React from "react";
 import {
   CookieSettings,
@@ -9,6 +9,12 @@ import {
   updateIsSecure,
   updatePath,
 } from "../utils/cookie.ts";
+import {
+  getColoredSameOrigin,
+  getColoredSchemefulSameSite,
+  getColoredSchemelessSameSite,
+  getColoredWildcardHost,
+} from "../utils/color.tsx";
 
 function InputCookieSettings({
   victimComponents,
@@ -349,80 +355,38 @@ function OutputCookieScopes({
 
   // (dev note: should be DRY-ed out, repeating patterns in OutputSiteOriginScopesTable)
   const missingComponentColor = "bg-gray-200"; // if this gets shown, something went wrong
-  const victimSchemeColor = coloredComponents.schemes[victimComponents.scheme];
   const victimHostColor = coloredComponents.hosts[victimComponents.host];
   const victimRegistrableDomainColor = victimComponents.registrableDomain
     ? coloredComponents.registrableDomains[victimComponents.registrableDomain]
     : missingComponentColor;
-  const victimPortColor = victimComponents.port
-    ? coloredComponents.ports[victimComponents.port]
-    : missingComponentColor;
 
-  const victimSchemelesslySameSiteScope = (
-    <>
-      *://
-      {victimComponents.registrableDomain ? "**." : ""}
-      {victimComponents.registrableDomain ? (
-        <span className={victimRegistrableDomainColor}>
-          {victimComponents.registrableDomain}
-        </span>
-      ) : (
-        <span className={victimHostColor}>{victimComponents.host}</span>
-      )}
-      :*/**
-    </>
+  const victimWildcardHost = getColoredWildcardHost(
+    victimComponents,
+    coloredComponents,
   );
 
-  const victimSchemefullySameSiteScope = (
-    <>
-      <span className={victimSchemeColor}>{victimComponents.scheme}</span>://
-      {victimComponents.registrableDomain && "**."}
-      {victimComponents.registrableDomain ? (
-        <span className={victimRegistrableDomainColor}>
-          {victimComponents.registrableDomain}
-        </span>
-      ) : (
-        <span className={victimHostColor}>{victimComponents.host}</span>
-      )}
-      :*/**
-    </>
+  const victimSchemelesslySameSiteScope = getColoredSchemelessSameSite(
+    victimComponents,
+    coloredComponents,
+  );
+  const victimSchemefullySameSiteScope = getColoredSchemefulSameSite(
+    victimComponents,
+    coloredComponents,
   );
 
-  const victimSameOriginScope = (
-    <>
-      <span className={victimSchemeColor}>{victimComponents.scheme}</span>://
-      <span className={victimHostColor}>{victimComponents.host}</span>
-      {victimComponents.port && (
-        <>
-          :<span className={victimPortColor}>{victimComponents.port}</span>
-        </>
-      )}
-      /**
-    </>
+  const victimSameOriginScope = getColoredSameOrigin(
+    victimComponents,
+    coloredComponents,
   );
 
   const purgeCookiesFromWholeSchemelessSiteScope = (
-    <>
-      https://
-      {victimComponents.registrableDomain ? (
-        <>
-          **.
-          <span className={victimRegistrableDomainColor}>
-            {victimComponents.registrableDomain}
-          </span>
-        </>
-      ) : (
-        <span className={victimHostColor}>{victimComponents.host}</span>
-      )}
-      :*/**
-    </>
+    <>https://{victimWildcardHost}:*/**</>
   );
 
   // Only diff between readCookieScope and directModificationScope (overwrite/delete)
   // is path
-  const readCookieScope = (
+  const directInteractHostPattern = (
     <>
-      {isSecure ? "https://" : "*://"}
       {!domain ? (
         <span className={victimHostColor}>{victimComponents.host}</span>
       ) : (
@@ -439,6 +403,13 @@ function OutputCookieScopes({
           </>
         )
       )}
+    </>
+  );
+
+  const readCookieScope = (
+    <>
+      {isSecure ? "https://" : "*://"}
+      {directInteractHostPattern}
       :*{path}
       {path === "/" ? "" : "/"}**
     </>
@@ -447,22 +418,7 @@ function OutputCookieScopes({
   const directModificationScope = (
     <>
       {isSecure ? "https://" : "*://"}
-      {!domain ? (
-        <span className={victimHostColor}>{victimComponents.host}</span>
-      ) : (
-        victimComponents.registrableDomain && (
-          <>
-            **.
-            {domain.substring(
-              0,
-              domain.length - victimComponents.registrableDomain.length,
-            )}
-            <span className={victimRegistrableDomainColor}>
-              {victimComponents.registrableDomain}
-            </span>
-          </>
-        )
-      )}
+      {directInteractHostPattern}
       :*/**
     </>
   );
@@ -472,15 +428,8 @@ function OutputCookieScopes({
       {isCookieNamePrefixSecure || isCookieNamePrefixHost ? "https://" : "*://"}
       {isCookieNamePrefixHost ? (
         <span className={victimHostColor}>{victimComponents.host}</span>
-      ) : victimComponents.registrableDomain ? (
-        <>
-          **.
-          <span className={victimRegistrableDomainColor}>
-            {victimComponents.registrableDomain}
-          </span>
-        </>
       ) : (
-        <span className={victimHostColor}>{victimComponents.host}</span>
+        victimWildcardHost
       )}
       :*/**
     </>
@@ -489,17 +438,7 @@ function OutputCookieScopes({
   const evictingCookieScope = (
     <>
       {isSecure ? "https://" : "*://"}
-      {victimComponents.registrableDomain ? (
-        <>
-          **.
-          <span className={victimRegistrableDomainColor}>
-            {victimComponents.registrableDomain}
-          </span>
-        </>
-      ) : (
-        <span className={victimHostColor}>{victimComponents.host}</span>
-      )}
-      :*/**
+      {victimWildcardHost}:*/**
     </>
   );
 

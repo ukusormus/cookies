@@ -491,7 +491,7 @@ function OutputCookieScopes({
                 <li>
                   If a cookie has the <code>HttpOnly</code> attribute set,
                   attacker must have control of a server in scope to return the{" "}
-                  <code>Set-Cookie</code> header in HTTP response to
+                  <code>Set-Cookie</code> header in HTTP response to directly
                   delete/overwrite the cookie
                 </li>
                 <li>
